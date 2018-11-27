@@ -62,12 +62,12 @@ unifiedServerHandling = (req, res) => {
 }
 
 router = {
-    'users' : handlers.users,
-    'login' : handlers.login,
-    'logout': handlers.logout,
-    'menu': handlers.menu,
-    'shoppingcart': handlers.shoppingcart,
-    'checkout': handlers.checkout
+    'api/users' : handlers.users,
+    'api/login' : handlers.login,
+    'api/logout': handlers.logout,
+    'api/menu': handlers.menu,
+    'api/shoppingcart': handlers.shoppingcart,
+    'api/checkout': handlers.checkout
 }
 
 httpServer = http.createServer(function(req, res) {

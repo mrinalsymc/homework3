@@ -6,7 +6,7 @@ This can be used to create, edit and delete a user
 ### Creating a user
 ```
 curl -X POST \
-  http://localhost:3000/users \
+  http://localhost:3000/api/users \
   -d '{
 	"name":"mrinal",
 	"email":"mrinalr@gmail.com",
@@ -22,8 +22,8 @@ curl -X POST \
 
 ```
 curl -X PUT \
-  http://localhost:3000/users \
-  -H 'token: lh09fkrxpli24ds2e7lo' \
+  http://localhost:3000/api/users \
+  -H 'token: 0a2qv1xotgu02ittyev2' \
   -d '{
 	"email":"mrinalr@gmail.com",
 	"address":"some address1",
@@ -38,15 +38,15 @@ curl -X PUT \
 
 ```
 curl -X DELETE \
-  http://localhost:3000/users \
-  -H 'token: lh09fkrxpli24ds2e7lo'
+  http://localhost:3000/api/users \
+  -H 'token: 0a2qv1xotgu02ittyev2'
 ```
 
 ## /login
 
 ```
 curl -X POST \
-  http://localhost:3000/login \
+  http://localhost:3000/api/login \
   -d '{
 	"email":"mrinalr@gmail.com",
 	"password":"qwer1234"
@@ -63,7 +63,7 @@ the `id` is the `token` which needs to be passed for any further actions
 
 ```
 curl -X GET \
-  http://localhost:3000/logout \
+  http://localhost:3000/api/logout \
  -H 'token: vsw3qpxc36ueuc8ibhpz'
 ```
 
@@ -73,8 +73,8 @@ curl -X GET \
 
 ```
  curl -X GET \
-  http://localhost:3000/menu \
-  -H 'token: w9sck8bx9ti345mhselv'
+  http://localhost:3000/api/menu \
+  -H 'token: o8bqkwpb3c5t7nfu641v'
 ```
 
 ## /shoppingcart
@@ -85,7 +85,7 @@ curl -X GET \
 
 ```
 curl -X POST \
-  http://localhost:3000/shoppingcart \
+  http://localhost:3000/api/shoppingcart \
   -H 'token: w9sck8bx9ti345mhselv' \
   -d '{
 	"menuItemId":"p3",
@@ -98,8 +98,8 @@ curl -X POST \
 
 ```
 curl -X GET \
-  http://localhost:3000/shoppingcart \
-  -H 'token: zfb3zsv6m9jhpktxii2m'
+  http://localhost:3000/api/shoppingcart \
+  -H 'token: o8bqkwpb3c5t7nfu641v'
 ```
 
 
@@ -108,7 +108,7 @@ curl -X GET \
 
 ```
 curl -X PUT \
-  http://localhost:3000/shoppingcart \
+  http://localhost:3000/api/shoppingcart \
   -H 'token: w9sck8bx9ti345mhselv' \
   -d '{
 	"menuItemId":"p3",
@@ -124,7 +124,7 @@ This also assumes that `stripe` has already processed the users paument informat
 
 ```
 curl -X POST \
-  http://localhost:3000/checkout \
+  http://localhost:3000/api/checkout \
   -H 'token: w9sck8bx9ti345mhselv' \
   -d '{
 	"sourceToken":"tok_visa"

@@ -40,12 +40,57 @@ unifiedServerHandling = (req, res) => {
         }
 
         var chosenHandler = typeof(router[trimmedPath]) !== 'undefined'? router[trimmedPath]: handlers.notFound;
+
+        chosenHandler = trimmedPath.indexOf('public/') > -1 ? handlers.public: chosenHandler;
+        
         chosenHandler(data).then((success) => {
-            var status = 200;
-            var payload = typeof(success.data) === 'object'? {'Data':success.data}: {};
-            res.setHeader('Content-type', 'application/json');
+            //determine the type of response (fallback to json)
+            var contentType = typeof(success.contentType) === 'string'? success.contentType: 'json'; 
+            var status = typeof(success.status) === 'number'? success.status: 200;
+            var payload = success.payload;
+            debug('\x1b[32m%s\x1b[0m','success : ',success, trimmedPath);
+
+            var payloadString = '';
+            if (contentType === 'json') {
+                debug('json handling');
+                res.setHeader('Content-type', 'application/json');
+                payload = typeof(payload) === 'object'? payload: {};
+                payloadString = JSON.stringify(payload)
+            }
+            if (contentType === 'html') {
+                debug('html handling');
+                res.setHeader('Content-type', 'text/html');
+                payloadString = typeof(payload) === 'string'? payload: '';
+            }
+
+            if (contentType === 'favicon') {
+                debug('icon handling');
+                res.setHeader('Content-type', 'image/x-icon');
+                payloadString = typeof(payload) !== undefined? payload: '';
+            }
+            if (contentType === 'css') {
+                debug('icon handling');
+                res.setHeader('Content-type', 'text/css');
+                payloadString = typeof(payload) !== undefined? payload: '';
+            }
+            if (contentType === 'png') {
+                debug('icon handling');
+                res.setHeader('Content-type', 'image/png');
+                payloadString = typeof(payload) !== undefined? payload: '';
+            }
+            if (contentType === 'jpg') {
+                debug('icon handling');
+                res.setHeader('Content-type', 'image/jpeg');
+                payloadString = typeof(payload) !== undefined? payload: '';
+            }
+            if (contentType === 'plain') {
+                debug('icon handling');
+                res.setHeader('Content-type', 'text/plain');
+                payloadString = typeof(payload) !== undefined? payload: '';
+            }
+            
             res.writeHead(status);
-            res.end(JSON.stringify(payload));
+            res.end(payloadString);
             debug('return payload : ', status, payload);
         }).catch (err => {
             var status = err.status;
@@ -62,12 +107,22 @@ unifiedServerHandling = (req, res) => {
 }
 
 router = {
+    '': handlers.index,
+    'account/create': handlers.accountCreate,
+    'account/edit': handlers.accountEdit,
+    'account/deleted': handlers.accountDeleted,
+    'session/create': handlers.sessionCreate,
+    'session/deleted': handlers.sessionDeleted,
+    'myshopping/cart': handlers.shoppingcartList,
+    'menu/menuList': handlers.menuList,
     'api/users' : handlers.users,
     'api/login' : handlers.login,
     'api/logout': handlers.logout,
     'api/menu': handlers.menu,
     'api/shoppingcart': handlers.shoppingcart,
-    'api/checkout': handlers.checkout
+    'api/checkout': handlers.checkout,
+    'favicon.ico': handlers.favicon,
+    'public' : handlers.public
 }
 
 httpServer = http.createServer(function(req, res) {
